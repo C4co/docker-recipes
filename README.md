@@ -44,15 +44,6 @@ Start containers
 docker compose up -d
 ```
 
-### Alias
-
-Alias for shell
-
-
-```
-docker rm --force $(docker ps -a -q)
-```
-
 ---
 
 Carlos Costa @ 2022
