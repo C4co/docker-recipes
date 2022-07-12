@@ -22,6 +22,7 @@ docker exec lv-php composer create-project laravel/laravel .
 ```
 
 Connect database in ```.env```
+
 ```
 DB_CONNECTION=pgsql
 DB_HOST=postgres
@@ -31,6 +32,12 @@ DB_USERNAME=dev_user
 DB_PASSWORD=dev_pass
 ```
 ### Possible problems
+
+permissions after create files inside a container
+
+```
+chmod -R ${user}:${user} /project
+```
 
 permission to storage folder
 ```
