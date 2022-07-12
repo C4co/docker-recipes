@@ -1,0 +1,10 @@
+services:
+  node:
+    container_name: "react-node"
+    image: node:18-alpine
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
