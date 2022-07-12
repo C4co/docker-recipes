@@ -1,0 +1,90 @@
+#Docker Networks
+networks:
+  laravel:
+
+services:
+  # backend
+
+  php:
+    container_name: "lv-php"
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    working_dir: /app/project
+    tty: true
+    depends_on:
+      - postgres
+    networks:
+      - laravel
+
+  # PHP fpm
+
+  phpfpm:
+    container_name: "lv-php-fpm"
+    image: bitnami/php-fpm:8.1
+    volumes:
+      - ./project:/usr/share/nginx/www
+    tty: true
+    networks:
+      - laravel
+
+  # server
+
+  nginx:
+    container_name: "lv-nginx"
+    image: nginx:1.23.0-alpine
+    ports:
+      - "2000:80"
+    volumes:
+      - ./project:/usr/share/nginx/www
+      - ./conf.d:/etc/nginx/conf.d
+    tty: true
+    depends_on:
+      - phpfpm
+    networks:
+      - laravel
+
+  # frontend
+
+  node:
+    container_name: "lv-node"
+    image: node:18-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    working_dir: /app/project
+    command: npm run dev
+    tty: true
+    networks:
+      - laravel
+
+  # database
+
+  postgres:
+    container_name: "lv-postgres"
+    image: postgres:14.4-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_pass
+      - POSTGRES_DB=dev_db
+    tty: true
+    networks:
+      - laravel
+
+  # mailhog
+
+  mailhog:
+    container_name: "lv-mailhog"
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    command: ~/go/bin/MailHog
+    tty: true
+    networks:
+      - laravel
