@@ -9,7 +9,7 @@
 - node:18
 - mailhog
 
-### First streps
+### Start development
 
 Up containers
 ```
@@ -19,6 +19,16 @@ docker compose up -d
 Creating new project
 ```
 docker exec lv-php composer create-project laravel/laravel .
+```
+
+Install npm deps
+```
+docker exec lv-node npm install
+```
+
+Fix permissions
+```
+sudo chown -R ${USER}:${USER} project
 ```
 
 Connect database in ```.env```
@@ -31,13 +41,8 @@ DB_DATABASE=dev_db
 DB_USERNAME=dev_user
 DB_PASSWORD=dev_pass
 ```
+
 ### Possible problems
-
-permissions after create files inside a container
-
-```
-chmod -R ${user}:${user} /project
-```
 
 permission to storage folder
 ```
